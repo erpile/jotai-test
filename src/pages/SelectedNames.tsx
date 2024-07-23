@@ -6,7 +6,7 @@ type Props = {
 
 const SelectedNames = ({ selectedOptions }: Props) => {
   return (
-    <p style={{ color: "white" }}>
+    <p style={{ color: "white", height: "200px" }}>
       {selectedOptions.map((option) => option.name).join(", ")}
     </p>
   );

@@ -1,10 +1,12 @@
-import { Option } from "./types";
+import { useAtomValue } from "jotai";
+import { selectedOptionsAtom } from "./state";
 
 type Props = {
-  selectedOptions: Option[];
+  // selectedOptions: Option[];
 };
 
-const SelectedNames = ({ selectedOptions }: Props) => {
+const SelectedNames = ({}: Props) => {
+  const selectedOptions = useAtomValue(selectedOptionsAtom);
   return (
     <p style={{ color: "white", height: "200px" }}>
       {selectedOptions.map((option) => option.name).join(", ")}

@@ -1,12 +1,32 @@
+import { useAtom } from "jotai";
+import { useCallback } from "react";
+import { selectedOptionsAtom } from "./state";
 import { Option } from "./types";
 
 type Props = {
   option: Option;
-  selected: boolean;
-  onPressToggle: (option: Option) => void;
 };
 
-const ListItem = ({ option, selected, onPressToggle }: Props) => {
+const ListItem = ({ option }: Props) => {
+  const [selectedOptions, setSelectedOptions] = useAtom(selectedOptionsAtom);
+  const selected = selectedOptions.some(
+    (selectedOption) => selectedOption.id === option.id
+  );
+  const toggleSelectedOption = useCallback(
+    (option: Option) => {
+      if (!selected) {
+        setSelectedOptions([...selectedOptions, option]);
+        return;
+      }
+      setSelectedOptions([
+        ...selectedOptions.filter(
+          (selectedOption) => selectedOption.id !== option.id
+        ),
+      ]);
+    },
+    [selected, selectedOptions, setSelectedOptions]
+  );
+
   return (
     <li>
       <span>{option.name}</span>
@@ -14,7 +34,7 @@ const ListItem = ({ option, selected, onPressToggle }: Props) => {
         type={"checkbox"}
         checked={selected}
         onChange={() => {
-          onPressToggle(option);
+          toggleSelectedOption(option);
         }}
       />
     </li>

@@ -1,54 +1,20 @@
-import { useCallback } from "react";
+import { useAtomValue } from "jotai";
 import ListItem from "./ListItem";
-import { Option } from "./types";
+import { optionsAtom } from "./state";
 
 type Props = {
-  options: Option[];
-  selectedOptions: Option[];
-  setSelectedOptions: (options: Option[]) => void;
   searchText: string;
 };
 
-const List = ({
-  options,
-  searchText,
-  selectedOptions,
-  setSelectedOptions,
-}: Props) => {
-  const toggleSelectedOption = useCallback(
-    (option: Option) => {
-      const selected = selectedOptions.some(
-        (selectedOption) => selectedOption.id === option.id
-      );
-      if (!selected) {
-        setSelectedOptions([...selectedOptions, option]);
-        return;
-      }
-      setSelectedOptions([
-        ...selectedOptions.filter(
-          (selectedOption) => selectedOption.id !== option.id
-        ),
-      ]);
-    },
-    [selectedOptions, setSelectedOptions]
-  );
+const List = ({ searchText }: Props) => {
+  const options = useAtomValue(optionsAtom);
   return (
     <ul>
       {options &&
         options
           .filter((option) => option.name.includes(searchText))
           .map((option) => {
-            const selected = selectedOptions.some(
-              (selectedOption) => selectedOption.id === option.id
-            );
-            return (
-              <ListItem
-                key={option.id}
-                option={option}
-                selected={selected}
-                onPressToggle={toggleSelectedOption}
-              />
-            );
+            return <ListItem key={option.id} option={option} />;
           })}
     </ul>
   );

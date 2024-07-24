@@ -1,4 +1,7 @@
-export const options = [
+import { atom } from "jotai";
+import { Option } from "./types";
+
+export const options: Option[] = [
   {
     id: 1,
     name: "Mohammad Ali",
@@ -20,3 +23,8 @@ export const options = [
     name: "Roberto Duran",
   },
 ];
+
+export const appScope = Symbol();
+
+export const optionsAtom = atom<Option[]>(options);
+export const selectedOptionsAtom = atom<Option[]>([]);

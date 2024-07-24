@@ -1,6 +1,5 @@
 import { useAtom } from "jotai";
-import { useCallback } from "react";
-import { selectedOptionsAtom } from "./state";
+import { optionsAtomFamily } from "./state";
 import { Option } from "./types";
 
 type Props = {
@@ -8,24 +7,28 @@ type Props = {
 };
 
 const ListItem = ({ option }: Props) => {
-  const [selectedOptions, setSelectedOptions] = useAtom(selectedOptionsAtom);
-  const selected = selectedOptions.some(
-    (selectedOption) => selectedOption.id === option.id
-  );
-  const toggleSelectedOption = useCallback(
-    (option: Option) => {
-      if (!selected) {
-        setSelectedOptions([...selectedOptions, option]);
-        return;
-      }
-      setSelectedOptions([
-        ...selectedOptions.filter(
-          (selectedOption) => selectedOption.id !== option.id
-        ),
-      ]);
-    },
-    [selected, selectedOptions, setSelectedOptions]
-  );
+  // const [selectedOptions, setSelectedOptions] = useAtom(selectedOptionsAtom);
+  // const selected = selectedOptions.some(
+  //   (selectedOption) => selectedOption.id === option.id
+  // );
+  const [selected, setSelected] = useAtom(optionsAtomFamily(option.id));
+  // const toggleSelectedOption = useCallback(
+  //   (option: Option) => {
+  //     if (!selected) {
+  //       setSelectedOptions([...selectedOptions, option]);
+  //       return;
+  //     }
+  //     setSelectedOptions([
+  //       ...selectedOptions.filter(
+  //         (selectedOption) => selectedOption.id !== option.id
+  //       ),
+  //     ]);
+  //   },
+  //   [selected, selectedOptions, setSelectedOptions]
+  // );
+  const toggleSelectedOption = () => {
+    setSelected((prev) => !prev);
+  };
 
   return (
     <li>
@@ -34,7 +37,7 @@ const ListItem = ({ option }: Props) => {
         type={"checkbox"}
         checked={selected}
         onChange={() => {
-          toggleSelectedOption(option);
+          toggleSelectedOption();
         }}
       />
     </li>

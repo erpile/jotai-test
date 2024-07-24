@@ -1,4 +1,5 @@
 import { atom } from "jotai";
+import { atomFamily } from "jotai/utils";
 import { Option } from "./types";
 
 export const options: Option[] = [
@@ -24,7 +25,22 @@ export const options: Option[] = [
   },
 ];
 
+export const options2: Option[] = [
+  {
+    id: 1,
+    name: "Mohammad Ali",
+  },
+  {
+    id: 2,
+    name: "Manny Pacquiao",
+  },
+];
+
 export const appScope = Symbol();
 
 export const optionsAtom = atom<Option[]>(options);
-export const selectedOptionsAtom = atom<Option[]>([]);
+export const optionsAtomFamily = atomFamily((id) => atom(false));
+export const selectedOptionsAtoms = atom((get) => {
+  const options = get(optionsAtom);
+  return options.filter((option) => get(optionsAtomFamily(option.id)));
+});
